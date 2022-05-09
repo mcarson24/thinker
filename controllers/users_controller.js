@@ -31,16 +31,17 @@ export default {
   update: async (req, res) => {
     // TODO: Handle user with the id param not existing
 
-    await User.findOneAndUpdate({ _id: req.params.id }, {
+    const user = await User.findOneAndUpdate({ _id: req.params.id }, {
       $set: {
         username: req.body.username,
         email: req.body.email
       }
+    }, { 
+      new: true,
+      runValidators: true
     })
 
-    const updated = await User.findById(req.params.id)
-
-    return res.status(200).json(updated)
+    return res.status(200).json(user)
   },
 
   destroy: async (req, res) => {

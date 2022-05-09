@@ -7,7 +7,7 @@ const schema = new Schema({
   reactionId: {
     type: Schema.Types.ObjectId,
     required: true,
-    default: new mongoose.Types.ObjectId
+    default: () => new mongoose.Types.ObjectId
   },
   reactionBody: {
     type: Schema.Types.String,

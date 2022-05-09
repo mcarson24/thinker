@@ -16,7 +16,6 @@ const schema = new Schema({
     unique: true,
     match: new RegExp(/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, 'i')
   },
-  // thoughts: [Thought],
   thoughts: {
     type: Schema.Types.ObjectId,
     ref: 'Thought'
