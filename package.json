@@ -29,6 +29,8 @@
   "homepage": "https://github.com/mcarson24/thinker#readme",
   "dependencies": {
     "express": "^4.18.1",
-    "mongoose": "^6.3.2"
+    "luxon": "^2.4.0",
+    "mongoose": "^6.3.2",
+    "mongoose-unique-validator": "^3.0.0"
   }
 }
