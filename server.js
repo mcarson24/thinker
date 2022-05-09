@@ -7,7 +7,6 @@ const app = express()
 
 app.use(routes)
 
-
 db.once('open', () => {
   app.listen(PORT, () => console.log(`Currently listening at http://localhost:${PORT}/`))
 })
