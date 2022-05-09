@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import Thought from './Thought.js'
 import uniqueValidator from 'mongoose-unique-validator'
 
 const { Schema, model } = mongoose
@@ -15,10 +14,17 @@ const schema = new Schema({
     type: Schema.Types.String,
     required: true,
     unique: true,
-    match: new RegExp(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/, 'i')
+    match: new RegExp(/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, 'i')
   },
-  thoughts: [Thought],
-  friends: [User]
+  // thoughts: [Thought],
+  thoughts: {
+    type: Schema.Types.ObjectId,
+    ref: 'Thought'
+  },
+  friends: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 schema.virtual('friendCount')
