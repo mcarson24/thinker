@@ -21,8 +21,8 @@ export default {
     try {
       const friend = await User.findById(req.body.id)
       if (!friend) throw new Error(req.body.id)
-      const user = await User.findOneAndUpdate({ _id: req.params.id }, {
-        $addToSet: { friends: friend._id } },
+      const user = await User.findOneAndUpdate({ _id: req.params.id }, 
+        { $addToSet: { friends: friend._id } },
         { new: true }
       )
       return res.status(201).json(user)

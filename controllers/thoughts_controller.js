@@ -1,4 +1,5 @@
-import Thought from "../models/Thought.js"
+import Thought from '../models/Thought.js'
+import User from '../models/User.js'
 
 export default {
   index: async (req, res) => {
@@ -23,12 +24,25 @@ export default {
   },
 
   store: async (req, res) => {
-    const thought = await Thought.create({
-      thoughtText: req.body.thoughtText,
-      username: req.body.username
-    })
-
-    return res.status(201).json(thought)
+    try {
+      const thought = await Thought.create({
+        thoughtText: req.body.thoughtText,
+        username: req.body.username
+      })
+      const user = await User.findOneAndUpdate(
+        { username: req.body.username },
+        { $addToSet: { thoughts: thought._id } },
+        { new: true }
+      )
+      console.log(user)
+      if (!user) throw new Error(req.body.username)
+      return res.status(201).json(thought)
+    } catch (err) {
+      return res.status(404).json({
+        status: 404,
+        message: `A user with a username of '${err.value}' could not be found.`
+      })
+    }
   },
 
   update: async (req, res) => {
