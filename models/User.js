@@ -16,14 +16,18 @@ const schema = new Schema({
     unique: true,
     match: new RegExp(/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/, 'i')
   },
-  thoughts: {
-    type: Schema.Types.ObjectId,
-    ref: 'Thought'
-  },
-  friends: {
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  }
+  thoughts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Thought'
+    }
+  ],
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ]
 })
 
 schema.virtual('friendCount')
