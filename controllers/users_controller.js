@@ -1,4 +1,5 @@
 import { response } from 'express'
+import Thought from '../models/Thought.js'
 import User from '../models/User.js'
 
 export default {
@@ -31,7 +32,10 @@ export default {
 
   update: async (req, res) => {
     try {
-      const user = await User.findOneAndUpdate({ _id: req.params.id }, {
+      const user = await User.findById(req.params.id)
+      // Have to update all the user's thoughts if there username changes.
+      const user_thoughts = await Thought.find({ username: user.username})
+      const updated_user = await User.findByIdAndUpdate(req.params.id, {
         $set: {
           username: req.body.username,
           email: req.body.email
@@ -40,7 +44,11 @@ export default {
         new: true,
         runValidators: true
       })
-      return res.status(200).json(user)
+      user_thoughts.forEach(thought => {
+        thought.username = updated_user.username
+        thought.save()
+      })
+      return res.status(200).json(updated_user)
     } catch (err) {
       return res.json({
         error: {
