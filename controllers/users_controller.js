@@ -1,3 +1,4 @@
+import { response } from 'express'
 import User from '../models/User.js'
 
 export default {
@@ -29,28 +30,45 @@ export default {
   },
 
   update: async (req, res) => {
+    console.log('here 1')
     // TODO: Handle user with the id param not existing
-
-    const user = await User.findOneAndUpdate({ _id: req.params.id }, {
-      $set: {
-        username: req.body.username,
-        email: req.body.email
-      }
-    }, { 
-      new: true,
-      runValidators: true
-    })
-
-    return res.status(200).json(user)
+    try {
+      const user = await User.findOneAndUpdate({ _id: req.params.id }, {
+        $set: {
+          username: req.body.username,
+          email: req.body.email
+        }
+      }, { 
+        new: true,
+        runValidators: true
+      })
+      return res.status(200).json(user)
+    } catch (err) {
+      console.log('here')
+      return res.json({
+        error: {
+          status: 404,
+          message: `A user with an id of ${req.params.id} could not be found.`
+        }
+      })
+    }
   },
-
   destroy: async (req, res) => {
     // TODO: Handle user with the id param not existing
-    await User.findByIdAndDelete(req.params.id)
+    try {
+      await User.findByIdAndDelete(req.params.id)
 
-    return res.status(200).json({
-      status: 200,
-      message: `A user with an id of ${req.params.id} has been successfully deleted.`
-    })
+      return res.status(200).json({
+        status: 200,
+        message: `A user with an id of ${req.params.id} has been successfully deleted.`
+      })
+    } catch (err) {
+      return res.json({
+        error: {
+          status: 404,
+          message: `A user with an id of ${req.params.id} could not be found.`
+        }
+      })
+    }
   }
 }
