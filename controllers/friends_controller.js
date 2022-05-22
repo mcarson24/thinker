@@ -19,9 +19,9 @@ export default {
 
   store: async (req, res) => {
     try {
-      const friend = await User.findById(req.body.id)
-      if (!friend) throw new Error(req.body.id)
-      const user = await User.findOneAndUpdate({ _id: req.params.id }, 
+      const friend = await User.findById(req.params.friend)
+      if (!friend) throw new Error(req.params.friend)
+      const user = await User.findOneAndUpdate({ _id: req.params.user }, 
         { $addToSet: { friends: friend._id } },
         { new: true }
       )

@@ -15,9 +15,9 @@ router.route('/:id')
 
 router.route('/:id/friends')
       .get(friends_controller.index)
-      .post(friends_controller.store)
-
+      
 router.route('/:user/friends/:friend')
+      .post(friends_controller.store)
       .delete(friends_controller.destroy)
 
 export default router
