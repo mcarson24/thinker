@@ -15,7 +15,7 @@ export default {
     else return res.status(404).json({
       error: {
         status: 404,
-        message: `A user with an id of ${req.params.id} could not be found.`
+        message: `A user with an id of '${req.params.id}' could not be found.`
       }
     })
   },
@@ -30,8 +30,6 @@ export default {
   },
 
   update: async (req, res) => {
-    console.log('here 1')
-    // TODO: Handle user with the id param not existing
     try {
       const user = await User.findOneAndUpdate({ _id: req.params.id }, {
         $set: {
@@ -44,29 +42,27 @@ export default {
       })
       return res.status(200).json(user)
     } catch (err) {
-      console.log('here')
       return res.json({
         error: {
           status: 404,
-          message: `A user with an id of ${req.params.id} could not be found.`
+          message: `A user with an id of '${req.params.id}' could not be found.`
         }
       })
     }
   },
   destroy: async (req, res) => {
-    // TODO: Handle user with the id param not existing
     try {
       await User.findByIdAndDelete(req.params.id)
 
       return res.status(200).json({
         status: 200,
-        message: `A user with an id of ${req.params.id} has been successfully deleted.`
+        message: `A user with an id of '${req.params.id}' has been successfully deleted.`
       })
     } catch (err) {
       return res.json({
         error: {
           status: 404,
-          message: `A user with an id of ${req.params.id} could not be found.`
+          message: `A user with an id of '${req.params.id}' could not be found.`
         }
       })
     }
