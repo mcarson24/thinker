@@ -1,10 +1,21 @@
+import Thought from "../models/Thought.js"
+
 export default {
-  index: (req, res) => {
-    res.send(`List of reactions from thought with an ID of ${req.params.id}`)
+  index: async (req, res) => {
+    const thought = await Thought.findById(req.params.id)
+
+    return res.status(200).json(thought.reactions)
   },
 
-  store: (req, res) => {
-    res.send(`Creating a new reaction to thought with an ID of ${req.params.id}`)
+  store: async (req, res) => {
+    const thought = await Thought.findByIdAndUpdate(req.params.id,
+      { $addToSet: { reactions: {
+        reactionBody: req.body.reactionBody,
+        username: req.body.username
+      }}},
+      { new: true }
+    )
+    return res.status(201).json(thought)
   },
 
   destroy: (req, res) => {

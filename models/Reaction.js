@@ -27,6 +27,8 @@ const schema = new Schema({
       return date.toLocaleString(DateTime.DATE_HUGE)
     }
   }
+}, {
+  _id: false
 })
 
 export default schema
