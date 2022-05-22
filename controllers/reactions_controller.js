@@ -18,7 +18,11 @@ export default {
     return res.status(201).json(thought)
   },
 
-  destroy: (req, res) => {
-    res.send(`Removing reaction with an ID of ${req.params.reaction} from thought with an ID of ${req.params.thought}`)
+  destroy: async (req, res) => {
+    const thought = await Thought.findByIdAndUpdate(req.params.thought,
+      { $pull: { reactions: { reactionId: req.params.reaction } } },
+      { new: true }
+    )
+    return res.status(200).json(thought)
   }
 }
