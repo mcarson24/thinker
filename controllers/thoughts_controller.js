@@ -1,21 +1,72 @@
+import Thought from "../models/Thought.js"
+
 export default {
-  index: (req, res) => {
-    return res.send('Thoughts Index')
+  index: async (req, res) => {
+    const thoughts = await Thought.find({})
+
+    return res.status(200).json(thoughts)
   },
 
-  show: (req, res) => {
-    return res.send(`Information for thought with an ID of ${req.params.id}`)
+  show: async (req, res) => {
+    try {
+      const thought = await Thought.findById(req.params.id)
+
+      return res.status(200).json(thought)
+    } catch (err) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `A thought with an id of '${req.params.id}' does not exist.`
+        }
+      })
+    }
   },
 
-  store: (req, res) => {
-    return res.send('Creating a new thought...')
+  store: async (req, res) => {
+    const thought = await Thought.create({
+      thoughtText: req.body.thoughtText,
+      username: req.body.username
+    })
+
+    return res.status(201).json(thought)
   },
 
-  update: (req, res) => {
-    return res.send(`Updating thought with an ID of ${req.params.id}`)
+  update: async (req, res) => {
+    try {
+      const thought = await Thought.findOneAndUpdate({ _id: req.params.id }, {
+        $set: {
+          thoughtText: req.body.thoughtText,
+          username: req.body.username
+        }
+      }, {
+        new: true,
+        runValidators: true
+      })
+      return res.status(200).json(thought)
+    } catch (err) {
+      return res.status(404).json({
+        error: {
+          status: 404,
+          message: `A thought with an id of '${req.params.id}' does not exist.`
+        }
+      })
+    }
   },
 
-  destroy: (req, res) => {
-    return res.send(`Deleting thought with an ID of ${req.params.id}`)
+  destroy: async (req, res) => {
+    try {
+      await Thought.findByIdAndDelete(req.params.id)
+      return res.status(200).json({
+        status: 200,
+        message: `A thought with an id of '${req.params.id}' has been successfully deleted.`
+      })
+    } catch (err) {
+      res.status(404).json({
+        error: {
+          status: 404,
+          message: `A thought with an id of '${req.params.id}' does not exist.`
+        }
+      })
+    }
   }
 }
