@@ -18,7 +18,6 @@ router.route('/:id/friends')
       .post(friends_controller.store)
 
 router.route('/:user/friends/:friend')
-      .get(friends_controller.show)
       .delete(friends_controller.destroy)
 
 export default router
