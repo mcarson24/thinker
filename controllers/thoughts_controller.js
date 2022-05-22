@@ -34,7 +34,6 @@ export default {
         { $addToSet: { thoughts: thought._id } },
         { new: true }
       )
-      console.log(user)
       if (!user) throw new Error(req.body.username)
       return res.status(201).json(thought)
     } catch (err) {
@@ -69,7 +68,15 @@ export default {
 
   destroy: async (req, res) => {
     try {
-      await Thought.findByIdAndDelete(req.params.id)
+      const thought = await Thought.findById(req.params.id)
+      const user = await User.findOneAndUpdate(
+        { username: thought.username },
+        { $pull: { thoughts: thought._id } },
+        { new: true }
+      )
+      console.log(user)
+      // await Thought.findByIdAndDelete(req.params.id)
+      thought.delete()
       return res.status(200).json({
         status: 200,
         message: `A thought with an id of '${req.params.id}' has been successfully deleted.`
